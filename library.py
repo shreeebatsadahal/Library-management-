@@ -73,8 +73,24 @@ def register_user(user_dict):
     return True
 users_dict = load_users()
 register_user(users_dict)
-#
 
-    
+#OPTIONAL NO NEED TO DISPLAY ALL USERS TO CUSTOMERS
+user_dict = load_users() #load users from file
+print(user_dict)
+
+
+def login_user(user_dict):
+    '''login an existing user'''
+    print("\n--- User Login ---")
+    username = input("Enter your username: ").strip()
+    password = input("Enter your password: ").strip()
+    if username in user_dict and user_dict[username] == password:
+        print(f"Welcome! {username.capitalize()}")
+        return username
+    else:
+        print("Invalid username or password.")
+        return None
+
+login_user(users_dict)   
 
                  
