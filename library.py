@@ -1,33 +1,27 @@
+# ...existing code...
 import os
 
-if not os.path.exists("users.txt"): # checking if file exist
-    with open("users.txt", "w") as f: # creating file
+if not os.path.exists("users.txt"):
+    with open("users.txt", "w") as f:
         pass
 
-if not os.path.exists("books.txt"): # checking if file exist
-    with open("books.txt", "w") as f: # creating file
+if not os.path.exists("books.txt"):
+    with open("books.txt", "w") as f:
         pass
 
-###load data from the file
 def load_users():
-    """load all the users from users.txt into a dictionary"""
-
     user_dict = {}
-
     try:
         with open("users.txt", "r") as f:
             for line in f:
-                line = line.strip() # remove any leading/trailing whitespace
+                line = line.strip()
                 if line:
-                    username, password = line.split(",") # split by comma
+                    username, password = line.split(",")
                     user_dict[username] = password
-
     except FileNotFoundError:
        print(" File not found!")
-
     return user_dict
- #book_id,title,author,quantity
-  
+
 def load_books():
     books_list = []
     try:
@@ -45,18 +39,14 @@ def load_books():
                    books_list.append(books)
     except FileNotFoundError:
          print(" File not found!")
-         return books_list  
+    return books_list  
 def get_exisiitng_books_id(books_list):
-    '''create a set to store all the ids of the books'''  
     book_ids = set()
     for books in books_list:
-        #dictionary
-       book_ids.add(books['id'])  
-       return book_ids
-#user reg(
+       book_ids.add(books['id'])
+    return book_ids
 def register_user(user_dict):
-    '''register a new user''' 
-    print("\n--- User Registration ---")   
+    print("\n--- User Registration ---")
     username = input("Enter a username: ").strip()
     password = input("Enter a password: ").strip()
     if username in user_dict:
@@ -66,7 +56,6 @@ def register_user(user_dict):
         print("Username and password cannot be empty.")
         return False
     user_dict[username] = password
-    #save the register user to the file 'users.txt
     with open("users.txt", "a") as f:
         f.write(f"{username},{password}\n")
     print("User registered successfully!")
@@ -74,13 +63,7 @@ def register_user(user_dict):
 users_dict = load_users()
 register_user(users_dict)
 
-#OPTIONAL NO NEED TO DISPLAY ALL USERS TO CUSTOMERS
-user_dict = load_users() #load users from file
-print(user_dict)
-
-
 def login_user(user_dict):
-    '''login an existing user'''
     print("\n--- User Login ---")
     username = input("Enter your username: ").strip()
     password = input("Enter your password: ").strip()
@@ -90,7 +73,60 @@ def login_user(user_dict):
     else:
         print("Invalid username or password.")
         return None
+login_user(users_dict)
+def main_menu():
+    print("="*55)
+    print(" Library Management System ")
+    print(" 1. Add Books")
+    print("2. View Books")
+    print("3. Search Book")
+    print("4. Issue Book")
+    print("5. Return Book")
+    print("6. Exit")
+main_menu() #call the function    
 
-login_user(users_dict)   
+def add_book(books_list,book_ids):
+    print("\n--- Add New Book ---")
+    book_id = input("Enter Book ID: ").strip()
+    if book_id in book_ids:
+        print("Book ID already exists.")
+        return 
+    title = input("Enter Book Title: ").strip()
+    author = input("Enter Book Author: ").strip()
+    try:
+        quantity = int(input("Enter Quantity: ").strip())
+    except ValueError:
+        print("Quantity must be an integer.")
+        return
 
-                 
+    new_book = {
+        'id': book_id,
+        'title': title,
+        'author': author,
+        'quantity': quantity
+    }
+
+    books_list.append(new_book)
+    book_ids.add(book_id)
+
+    with open("books.txt", "a") as f:
+        f.write(f"{book_id} {title} {author} {quantity}\n")
+    print("Book added successfully!")    
+books_list = load_books()
+book_ids = get_exisiitng_books_id(books_list)
+# print(books_list)
+add_book(books_list,book_ids)
+
+
+
+###FUNCTION TO VIEW ALL THE BOOKS
+def view_books(books_list):
+    '''Display all the books in the library'''
+    print("\n--- Available Books ---")
+    if not books_list:
+        print("No books available in the library.")
+        return
+    for book in books_list:
+        print(f"ID: {book['id']}, Title: {book['title']}, Author: {book['author']}, Quantity: {book['quantity']}")
+view_books(books_list)
+   
