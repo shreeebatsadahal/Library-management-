@@ -1,2 +1,2 @@
-# library mmgt syste,
-# this project
+# library mmgt system
+# this project aims to create the system to manage users and books in library using python
